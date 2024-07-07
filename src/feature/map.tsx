@@ -41,10 +41,10 @@ export const MapViewer = ({ onCoordinateChange, children }: MapViewerProps) => {
           ];
           onCoordinateChange(latLng_degree);
         },
-        Cesium.ScreenSpaceEventType.LEFT_UP
+        Cesium.ScreenSpaceEventType.LEFT_CLICK
       );
     }
-  }, []);
+  }, [onCoordinateChange]);
 
   return (
     <Viewer full ref={ref}>

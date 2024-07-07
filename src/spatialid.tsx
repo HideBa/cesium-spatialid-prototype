@@ -3,6 +3,7 @@ import { MapViewer } from "./feature/map";
 import UIContainer from "./ui";
 import Square from "./cesium/square/square";
 import { useHooks } from "./hooks";
+import Cube from "./cesium/square/cube";
 
 const SpatialIdRequester = () => {
   const {
@@ -11,7 +12,11 @@ const SpatialIdRequester = () => {
     handleCoordChange,
     handleChange,
     squareCoords,
+    mode,
+    toggleMode,
+    cubeCoodinates,
   } = useHooks();
+
   return (
     <div>
       <UIContainer>
@@ -23,6 +28,7 @@ const SpatialIdRequester = () => {
       </UIContainer>
       <MapViewer onCoordinateChange={handleCoordChange}>
         {squareCoords && <Square coordinate={squareCoords} />}
+        {cubeCoodinates && <Cube coordinate={cubeCoodinates} />}
       </MapViewer>
     </div>
   );

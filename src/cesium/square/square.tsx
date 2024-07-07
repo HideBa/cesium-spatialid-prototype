@@ -1,6 +1,5 @@
 import { Entity } from "resium";
-import { Rectangle } from "cesium";
-import { Math } from "cesium";
+import { Rectangle, Math } from "cesium";
 export type SquareProps = {
   coordinate: [number, number, number, number]; // east, north, west, south in lat, lng
 };
