@@ -1,8 +1,8 @@
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { MapViewer } from "./map";
+import SpatialIdRequester from "./spatialid";
 
 function App() {
-  return <MapViewer />;
+  return <SpatialIdRequester />;
 }
 
 export default App;
