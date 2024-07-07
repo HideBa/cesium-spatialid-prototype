@@ -6,6 +6,9 @@ import cesium from "vite-plugin-cesium";
 export default defineConfig({
   plugins: [react(), cesium({ rebuildCesium: true }),
   ],
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+  },
   test: {
     globals: true,
     environment: 'jsdom',
