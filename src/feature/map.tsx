@@ -44,7 +44,16 @@ export const MapViewer = ({ onCoordinateChange, children }: MapViewerProps) => {
         Cesium.ScreenSpaceEventType.LEFT_CLICK
       );
     }
-  }, [onCoordinateChange]);
+
+    return () => {
+      if (ref.current && ref.current.cesiumElement) {
+        const viewer = ref.current.cesiumElement;
+        viewer.screenSpaceEventHandler.removeInputAction(
+          Cesium.ScreenSpaceEventType.LEFT_CLICK
+        );
+      }
+    };
+  });
 
   return (
     <Viewer full ref={ref}>

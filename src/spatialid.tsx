@@ -11,10 +11,10 @@ const SpatialIdRequester = () => {
     currentCoord,
     handleCoordChange,
     handleChange,
-    squareCoords,
+    squareCoordinates,
     mode,
     toggleMode,
-    cubeCoodinates,
+    cubeCoordinates,
   } = useHooks();
 
   return (
@@ -27,8 +27,10 @@ const SpatialIdRequester = () => {
         />
       </UIContainer>
       <MapViewer onCoordinateChange={handleCoordChange}>
-        {squareCoords && <Square coordinate={squareCoords} />}
-        {cubeCoodinates && <Cube coordinate={cubeCoodinates} />}
+        {squareCoordinates && <Square coordinate={squareCoordinates} />}
+        {cubeCoordinates?.[0].map((coord, index) => (
+          <Cube key={index} center={coord} dimension={cubeCoordinates[1]} />
+        ))}
       </MapViewer>
     </div>
   );

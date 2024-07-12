@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.16.0",
     "@spatial-id/javascript-sdk": "https://github.com/spatial-id/javascript-sdk",
+    "@turf/turf": "^7.0.0",
     "cesium": "^1.119.0",
     "jotai": "^2.8.4",
     "react": "^18.3.1",
