@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { coordToSpace, spaceBottom } from "./spatialid/index";
 import { Cartesian3 } from "cesium";
 
 const MAX_CUBE = 10;
 
+
 export const useHooks= () => {
   const [zoomLevel, setZoomLevel] = useState(14);
   const [currentCoord, setCurrentCoord] = useState<[number,number] | undefined>(undefined); //lat, lng
   const [mode, setMode] = useState<"square" | "cube">("cube");
+  const modes = ["square", "cube"];
+  const [selectedCubeId, setSelectedCubeId] = useState<string|undefined>(undefined);
 
   const handleCoordChange = useCallback(
     (coord: [number, number]) => {
@@ -16,18 +19,25 @@ export const useHooks= () => {
     [setCurrentCoord]
   );
 
-  const handleChange = useCallback(
+  const handleZoomLevelChange = useCallback(
     (value: number) => {
       setZoomLevel(value);
     },
     [setZoomLevel]
   );
 
-  const toggleMode = useCallback(
-    () => {
-      setMode(mode === "square" ? "cube" : "square");
+  const isMode = (mode: unknown): mode is "square" | "cube" => {
+    return mode === "square" || mode === "cube";
+  };
+
+  const handleModeChange = useCallback(
+    (mode: string) => {
+      if (!isMode(mode)) {
+        return;
+      }
+      setMode(mode === "square" ? "square" : "cube");
     },
-    [mode]
+    []
   );
 
   const squareCoordinates = useMemo(() => {
@@ -39,12 +49,20 @@ export const useHooks= () => {
   }, [currentCoord, zoomLevel])
 
 
+  const handleCubeSelect = useCallback(
+    (id: string) => {
+      setSelectedCubeId(id);
+    },
+    [setSelectedCubeId]);
 
-  const cubeCoordinates: [Cartesian3[], Cartesian3] | undefined = useMemo(() => {
+
+  const cubes = useMemo(() => {
     if (currentCoord){
-      const space = coordToSpace([currentCoord[1], currentCoord[0], 0], zoomLevel);
+      const buttomSpace = coordToSpace([currentCoord[1], currentCoord[0], 0], zoomLevel);
+      const spaces = Array.from({length: MAX_CUBE}, (_, i) => i).map(i => buttomSpace.up(i));
+
+      const cubes = spaces.map(space => {
       const vertices = space.vertices3d();
-      //find minx, miny, minz, maxx, maxy, maxz
       const x = vertices.map(v => v[0]);
       const y = vertices.map(v => v[1]);
       const z = vertices.map(v => v[2]);
@@ -59,11 +77,15 @@ export const useHooks= () => {
 
       const diff_z = Math.abs(maxz - minz);
       const dimension = new Cartesian3(diff_z, diff_z, diff_z);
-
-
-      const centers = Array.from({ length: MAX_CUBE }, (_, i) => Cartesian3.fromDegrees(centerX, centerY, minz + (diff_z * i)));
-
-      return [centers, dimension]
+      const center = Cartesian3.fromDegrees(centerX, centerY, space.center.alt);
+      const id = space.id;
+      return {
+        id,
+        center,
+        dimension
+      }
+    });
+    return cubes;
     }
     return undefined;
   }
@@ -73,10 +95,13 @@ export const useHooks= () => {
     zoomLevel,
     currentCoord,
     handleCoordChange,
-    handleChange,
+    handleZoomLevelChange,
     squareCoordinates,
     mode,
-    toggleMode,
-    cubeCoordinates
+    modes,
+    handleModeChange,
+    cubes,
+    selectedCubeId,
+    handleCubeSelect
   };
 };

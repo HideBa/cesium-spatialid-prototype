@@ -1,36 +1,58 @@
-import ZoomLevelSlider from "./components/form/slider";
 import { MapViewer } from "./feature/map";
 import UIContainer from "./ui";
 import Square from "./cesium/square/square";
 import { useHooks } from "./hooks";
 import Cube from "./cesium/square/cube";
+import { Controller } from "./feature/controller";
+import ApiTester from "./feature/apiTester";
 
 const SpatialIdRequester = () => {
   const {
     zoomLevel,
     currentCoord,
     handleCoordChange,
-    handleChange,
+    handleZoomLevelChange,
     squareCoordinates,
     mode,
-    toggleMode,
-    cubeCoordinates,
+    modes,
+    handleModeChange,
+    cubes,
+    selectedCubeId,
+    handleCubeSelect,
   } = useHooks();
-
   return (
     <div>
       <UIContainer>
-        <ZoomLevelSlider
-          valueRange={[14, 18]}
-          defaultValue={zoomLevel}
-          onChange={handleChange}
+        <Controller
+          zoomLevelRange={[14, 18]}
+          onZoomLevelChange={handleZoomLevelChange}
+          zoomLevel={zoomLevel}
+          mode={mode}
+          onModeChange={handleModeChange}
+          modes={modes}
         />
+        {selectedCubeId && <ApiTester />}
       </UIContainer>
-      <MapViewer onCoordinateChange={handleCoordChange}>
-        {squareCoordinates && <Square coordinate={squareCoordinates} />}
-        {cubeCoordinates?.[0].map((coord, index) => (
-          <Cube key={index} center={coord} dimension={cubeCoordinates[1]} />
-        ))}
+      <MapViewer
+        onCoordinateChange={handleCoordChange}
+        onCubeSelect={handleCubeSelect}
+        cubeId={selectedCubeId}
+      >
+        {mode === "square" && squareCoordinates && (
+          <Square coordinate={squareCoordinates} />
+        )}
+        {mode === "cube" &&
+          cubes?.length &&
+          cubes?.map(({ id, center, dimension }) => (
+            <Cube
+              key={id}
+              id={id}
+              center={center}
+              dimension={dimension}
+              color={"#00bebe"}
+              alpha={0.2}
+            />
+          ))}
       </MapViewer>
     </div>
   );
