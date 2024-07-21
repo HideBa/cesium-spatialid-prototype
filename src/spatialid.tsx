@@ -1,10 +1,10 @@
-import { MapViewer } from "./feature/map";
+import { MapViewer } from "./feature/mapViewer/map";
 import UIContainer from "./ui";
-import Square from "./cesium/square/square";
 import { useHooks } from "./hooks";
-import Cube from "./cesium/square/cube";
+
 import { Controller } from "./feature/controller";
 import ApiTester from "./feature/apiTester";
+import { CAMERA_POSITION, CAMERA_OFFSET } from "./const";
 
 const SpatialIdRequester = () => {
   const {
@@ -23,7 +23,7 @@ const SpatialIdRequester = () => {
     <div>
       <UIContainer>
         <Controller
-          zoomLevelRange={[14, 18]}
+          zoomLevelRange={[0, 20]}
           onZoomLevelChange={handleZoomLevelChange}
           zoomLevel={zoomLevel}
           mode={mode}
@@ -33,26 +33,24 @@ const SpatialIdRequester = () => {
         {selectedCubeId && <ApiTester />}
       </UIContainer>
       <MapViewer
+        defaultCameraPosition={CAMERA_POSITION}
+        defaultCameraOffset={CAMERA_OFFSET}
         onCoordinateChange={handleCoordChange}
         onCubeSelect={handleCubeSelect}
         cubeId={selectedCubeId}
-      >
-        {mode === "square" && squareCoordinates && (
-          <Square coordinate={squareCoordinates} />
-        )}
-        {mode === "cube" &&
-          cubes?.length &&
-          cubes?.map(({ id, center, dimension }) => (
-            <Cube
-              key={id}
-              id={id}
-              center={center}
-              dimension={dimension}
-              color={"#00bebe"}
-              alpha={0.2}
-            />
-          ))}
-      </MapViewer>
+        mode={mode}
+        squareCoordinates={squareCoordinates}
+        cubes={cubes}
+      ></MapViewer>
+      {/* <Visualizer
+        mode={mode}
+        cubes={cubes}
+        onCubeSelect={handleCubeSelect}
+        onCoordinateChange={handleCoordChange}
+        cubeId={selectedCubeId}
+        squareCoordinates={squareCoordinates}
+        defaultCameraPosition={CAMERA_POSITION}
+      /> */}
     </div>
   );
 };

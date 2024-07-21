@@ -1,6 +1,12 @@
 import { Entity } from "resium";
 import { Cartesian3, Color } from "cesium";
 
+export type Cube = {
+  id: string;
+  center: [number, number, number];
+  dimension: [number, number, number];
+};
+
 export type CubeProps = {
   center: [number, number, number]; // lng, lat, alt
   dimension: [number, number, number]; // width, height, depth
