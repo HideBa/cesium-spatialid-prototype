@@ -1,4 +1,4 @@
-import { Button, Stack, styled } from "@mui/material";
+import { Button, Stack, styled, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -47,6 +47,7 @@ const ApiTester = ({ spatialId }: ApiTesterProps) => {
       <Button onClick={handleSentRequest} disabled={loading}>
         {loading ? "Loading..." : "Send Reques"}
       </Button>
+      {spatialId && <Typography>{"Spatial ID: " + spatialId}</Typography>}
       {exJson && (
         <SyntaxHighlighter language="json" style={atomDark}>
           {exJson}

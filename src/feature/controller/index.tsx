@@ -7,6 +7,7 @@ import {
   RadioGroup,
   Slider,
   Stack,
+  Switch,
   styled,
 } from "@mui/material";
 import { useCallback } from "react";
@@ -18,6 +19,8 @@ export type ControllerProps = {
   mode: string;
   modes: string[];
   onModeChange: (mode: string) => void;
+  isSyncZoomLevel?: boolean;
+  onToggleSyncZoomLevel?: () => void;
 };
 
 export const Controller = ({
@@ -27,6 +30,8 @@ export const Controller = ({
   mode,
   modes,
   onModeChange,
+  isSyncZoomLevel,
+  onToggleSyncZoomLevel,
 }: ControllerProps) => {
   const handleZoomLevelChange = useCallback(
     (_: Event, value: number | number[]) => {
@@ -68,18 +73,29 @@ export const Controller = ({
           ))}
         </RadioGroup>
       </FormControl>
-      <Box sx={{ width: 200 }} m="20px">
-        <FormLabel>Zoom Level</FormLabel>
-        <Slider
-          min={zoomLevelRange[0]}
-          max={zoomLevelRange[1]}
-          step={1}
-          marks
-          valueLabelDisplay="auto"
-          value={zoomLevel}
-          onChange={handleZoomLevelChange}
+      <Stack direction="column">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={!!isSyncZoomLevel}
+              onClick={onToggleSyncZoomLevel}
+            />
+          }
+          label="Sync with camera"
         />
-      </Box>
+        <Box sx={{ width: 200 }} m="20px">
+          <FormLabel>Zoom Level</FormLabel>
+          <Slider
+            min={zoomLevelRange[0]}
+            max={zoomLevelRange[1]}
+            step={1}
+            marks
+            valueLabelDisplay="auto"
+            value={zoomLevel}
+            onChange={handleZoomLevelChange}
+          />
+        </Box>
+      </Stack>
     </StyledStack>
   );
 };

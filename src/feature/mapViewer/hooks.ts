@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { CesiumComponentRef } from "resium";
-import { type Cube as CubeType } from "../../cesium/cube/cube";
+import { type Cube as CubeType } from "../../components/cesium/cube";
 import {Viewer as CesiumViewer} from "cesium";
 import * as Cesium from "cesium";
+import { calculateZoomLevel } from "../../components/cesium/zoomLevel";
 
 export type SelectionMode = "square" | "cube";
 
@@ -15,6 +16,8 @@ export const useHooks = ({  defaultCameraPosition,
   defaultCameraOffset,
   onCoordinateChange,
   onCubeSelect,
+  isSyncZoomLevel,
+  onZoomLevelChange
   }: {defaultCameraPosition?: [number, number, number];
     defaultCameraOffset?: [number, number, number];
   onCoordinateChange: (coord: [number, number]) => void;
@@ -22,7 +25,10 @@ export const useHooks = ({  defaultCameraPosition,
   cubeId?: string;
   mode: SelectionMode;
   squareCoordinates?: [number, number, number, number];
-  cubes?: CubeType[];}) => {
+  cubes?: CubeType[];
+  isSyncZoomLevel?: boolean;
+  onZoomLevelChange?: (value: number) => void;
+}) => {
   const ref = useRef<CesiumComponentRef<CesiumViewer>>(null);
   const heading = Cesium.Math.toRadians(50.0)
   const pitch = Cesium.Math.toRadians(-20.0);
@@ -88,6 +94,13 @@ export const useHooks = ({  defaultCameraPosition,
     [handleCoordinateChange, handlePickupEntity]
   );
 
+  const handleCameraChange = useCallback(() => {
+    if (isSyncZoomLevel&&onZoomLevelChange&&ref.current?.cesiumElement?.scene) {
+      const zoomLevel = calculateZoomLevel(ref.current?.cesiumElement.scene);
+      onZoomLevelChange?.(zoomLevel+3);
+    }
+  }, [isSyncZoomLevel, onZoomLevelChange]);
 
-  return { ref, cameraPosition, cameraOffset, handleMouseClick };
+
+  return { ref, cameraPosition, cameraOffset, handleMouseClick, handleCameraChange };
 }

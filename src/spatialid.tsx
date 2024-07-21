@@ -1,5 +1,5 @@
-import { MapViewer } from "./feature/mapViewer/map";
-import UIContainer from "./ui";
+import { MapViewer } from "./feature/mapViewer";
+import UIContainer from "./components/layout";
 import { useHooks } from "./hooks";
 
 import { Controller } from "./feature/controller";
@@ -11,6 +11,8 @@ const SpatialIdRequester = () => {
     zoomLevel,
     handleCoordChange,
     handleZoomLevelChange,
+    isSyncZoomLevel,
+    handleSyncZoomLevel,
     squareCoordinates,
     mode,
     modes,
@@ -29,10 +31,14 @@ const SpatialIdRequester = () => {
           mode={mode}
           onModeChange={handleModeChange}
           modes={modes}
+          onToggleSyncZoomLevel={handleSyncZoomLevel}
+          isSyncZoomLevel={isSyncZoomLevel}
         />
-        {selectedCubeId && <ApiTester />}
+        {selectedCubeId && <ApiTester spatialId={selectedCubeId} />}
       </UIContainer>
       <MapViewer
+        isSyncZoomLevel={isSyncZoomLevel}
+        onZoomLevelChange={handleZoomLevelChange}
         defaultCameraPosition={CAMERA_POSITION}
         defaultCameraOffset={CAMERA_OFFSET}
         onCoordinateChange={handleCoordChange}

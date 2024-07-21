@@ -1,21 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import { coordToSpace, spaceBottom } from "./spatialid/index";
-import { Cartesian3 } from "cesium";
+import { coordToSpace, spaceBottom } from "./components/spatialid/index";
+import { SelectionMode } from "./feature/mapViewer";
 
 const MAX_CUBE = 10;
-const CAMERA_POSITION = [139.767052, 35.681167, 10000];
-
 
 export const useHooks= () => {
   const [zoomLevel, setZoomLevel] = useState(14);
+  const [isSyncZoomLevel, toggleSyncZoomLevel] = useState(false);
   const [currentCoord, setCurrentCoord] = useState<[number,number] | undefined>(undefined); //lat, lng
-  const [mode, setMode] = useState<"square" | "cube">("cube");
+  const [mode, setMode] = useState<SelectionMode>("cube");
   const modes = ["square", "cube"];
   const [selectedCubeId, setSelectedCubeId] = useState<string|undefined>(undefined);
 
-  const defaultCamera = useMemo(() => {
-    return new Cartesian3(...CAMERA_POSITION)
-  }, [])
 
   const handleCoordChange = useCallback(
     (coord: [number, number]) => {
@@ -30,6 +26,10 @@ export const useHooks= () => {
     },
     [setZoomLevel]
   );
+
+  const handleSyncZoomLevel = useCallback(() => {
+    toggleSyncZoomLevel(!isSyncZoomLevel);
+  }, [isSyncZoomLevel]);
 
   const isMode = (mode: unknown): mode is "square" | "cube" => {
     return mode === "square" || mode === "cube";
@@ -94,9 +94,10 @@ export const useHooks= () => {
   , [currentCoord, zoomLevel])
 
   return {
-    defaultCamera,
     zoomLevel,
     handleCoordChange,
+    isSyncZoomLevel,
+    handleSyncZoomLevel,
     handleZoomLevelChange,
     squareCoordinates,
     mode,
@@ -104,6 +105,6 @@ export const useHooks= () => {
     handleModeChange,
     cubes,
     selectedCubeId,
-    handleCubeSelect
+    handleCubeSelect,
   };
 };

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { type Cube } from "../../cesium/cube/cube";
+import { type Cube } from "../../components/cesium/cube";
 import { BoxAppearance, type Layer } from "@reearth/core";
 
 

@@ -1,6 +1,7 @@
 import * as Cesium from "cesium";
 
 import {
+  Camera,
   CameraLookAt,
   Globe,
   ImageryLayer,
@@ -9,10 +10,10 @@ import {
   ScreenSpaceEventHandler,
   Viewer,
 } from "resium";
-import Cube, { type Cube as CubeType } from "../../cesium/cube/cube";
-import Square from "../../cesium/square/square";
+import Cube, { type Cube as CubeType } from "../../components/cesium/cube";
+import Square from "../../components/cesium/square";
 import { useHooks, type SelectionMode as SelectionModeType } from "./hooks";
-import { Tileset } from "../../cesium/tileset/tileset";
+import { Tileset } from "../../components/cesium/tileset";
 
 export type SelectionMode = SelectionModeType;
 
@@ -25,6 +26,8 @@ export type MapViewerProps = {
   mode: SelectionMode;
   squareCoordinates?: [number, number, number, number];
   cubes?: CubeType[];
+  isSyncZoomLevel?: boolean;
+  onZoomLevelChange?: (value: number) => void;
 };
 
 export const MapViewer = ({
@@ -36,8 +39,16 @@ export const MapViewer = ({
   mode,
   squareCoordinates,
   cubes,
+  isSyncZoomLevel,
+  onZoomLevelChange,
 }: MapViewerProps) => {
-  const { cameraPosition, cameraOffset, handleMouseClick, ref } = useHooks({
+  const {
+    cameraPosition,
+    cameraOffset,
+    handleMouseClick,
+    ref,
+    handleCameraChange,
+  } = useHooks({
     onCoordinateChange,
     onCubeSelect,
     cubeId,
@@ -46,14 +57,26 @@ export const MapViewer = ({
     mode,
     defaultCameraPosition,
     defaultCameraOffset,
+    isSyncZoomLevel,
+    onZoomLevelChange,
   });
   return (
-    <Viewer full ref={ref}>
+    <Viewer
+      full
+      ref={ref}
+      timeline={false}
+      animation={false}
+      homeButton={false}
+      baseLayerPicker={false}
+      navigationHelpButton={false}
+      sceneModePicker={false}
+    >
       <Scene />
       <Globe show={true} />
       {cameraPosition && cameraOffset && (
         <CameraLookAt target={cameraPosition} offset={cameraOffset} once />
       )}
+      <Camera onChange={handleCameraChange} percentageChanged={0.2} />
       <ImageryLayer
         imageryProvider={
           new Cesium.UrlTemplateImageryProvider({
