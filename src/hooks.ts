@@ -3,6 +3,7 @@ import { coordToSpace, spaceBottom } from "./spatialid/index";
 import { Cartesian3 } from "cesium";
 
 const MAX_CUBE = 10;
+const CAMERA_POSITION = [139.767052, 35.681167, 10000];
 
 
 export const useHooks= () => {
@@ -11,6 +12,10 @@ export const useHooks= () => {
   const [mode, setMode] = useState<"square" | "cube">("cube");
   const modes = ["square", "cube"];
   const [selectedCubeId, setSelectedCubeId] = useState<string|undefined>(undefined);
+
+  const defaultCamera = useMemo(() => {
+    return new Cartesian3(...CAMERA_POSITION)
+  }, [])
 
   const handleCoordChange = useCallback(
     (coord: [number, number]) => {
@@ -63,21 +68,18 @@ export const useHooks= () => {
 
       const cubes = spaces.map(space => {
       const vertices = space.vertices3d();
-      const x = vertices.map(v => v[0]);
-      const y = vertices.map(v => v[1]);
+
       const z = vertices.map(v => v[2]);
-      const minx = Math.min(...x);
-      const miny = Math.min(...y);
+
       const minz = Math.min(...z);
-      const maxx = Math.max(...x);
-      const maxy = Math.max(...y);
+
       const maxz = Math.max(...z);
-      const centerX = (minx + maxx) / 2;
-      const centerY = (miny + maxy) / 2;
+      const centerX = space.center.lng;
+      const centerY = space.center.lat;
 
       const diff_z = Math.abs(maxz - minz);
-      const dimension = new Cartesian3(diff_z, diff_z, diff_z);
-      const center = Cartesian3.fromDegrees(centerX, centerY, space.center.alt);
+      const dimension: [number, number, number] = [diff_z, diff_z, diff_z]
+      const center: [number, number, number] = [centerX, centerY, space.center.alt ?? 0]
       const id = space.id;
       return {
         id,
@@ -92,8 +94,8 @@ export const useHooks= () => {
   , [currentCoord, zoomLevel])
 
   return {
+    defaultCamera,
     zoomLevel,
-    currentCoord,
     handleCoordChange,
     handleZoomLevelChange,
     squareCoordinates,

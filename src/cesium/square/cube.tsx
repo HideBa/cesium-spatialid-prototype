@@ -2,8 +2,8 @@ import { Entity } from "resium";
 import { Cartesian3, Color } from "cesium";
 
 export type CubeProps = {
-  center: Cartesian3;
-  dimension: Cartesian3;
+  center: [number, number, number]; // lng, lat, alt
+  dimension: [number, number, number]; // width, height, depth
   id: string;
   color?: string;
   alpha?: number;
@@ -26,9 +26,9 @@ const Cube = ({
   return (
     <Entity
       id={id}
-      position={center}
+      position={Cartesian3.fromDegrees(...center)}
       box={{
-        dimensions: dimension,
+        dimensions: new Cartesian3(...dimension),
         material: Color.fromCssColorString(color).withAlpha(alpha),
       }}
     />

@@ -9,7 +9,6 @@ import ApiTester from "./feature/apiTester";
 const SpatialIdRequester = () => {
   const {
     zoomLevel,
-    currentCoord,
     handleCoordChange,
     handleZoomLevelChange,
     squareCoordinates,

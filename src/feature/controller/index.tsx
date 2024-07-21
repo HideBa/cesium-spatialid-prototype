@@ -9,7 +9,7 @@ import {
   Stack,
   styled,
 } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 export type ControllerProps = {
   zoomLevelRange: [number, number];
@@ -85,7 +85,7 @@ export const Controller = ({
 };
 
 const StyledStack = styled(Stack)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper, // Use theme for consistent styling
+  backgroundColor: theme.palette.background.paper,
   padding: 20,
   margin: 20,
   borderRadius: 8,
