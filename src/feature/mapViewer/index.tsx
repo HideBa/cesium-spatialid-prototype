@@ -80,7 +80,8 @@ export const MapViewer = ({
       <ImageryLayer
         imageryProvider={
           new Cesium.UrlTemplateImageryProvider({
-            url: "https://tiles.plateau.reearth.io/light-map/{z}/{x}/{y}.png",
+            // url: "https://tiles.plateau.reearth.io/light-map/{z}/{x}/{y}.png",
+            url: "https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png",
             minimumLevel: 0,
             maximumLevel: 18,
             tileWidth: 256,

@@ -80,7 +80,7 @@ export const useHooks= () => {
       const diff_z = Math.abs(maxz - minz);
       const dimension: [number, number, number] = [diff_z, diff_z, diff_z]
       const center: [number, number, number] = [centerX, centerY, space.center.alt ?? 0]
-      const id = space.id;
+      const id = space.zfxyStr;
       return {
         id,
         center,
