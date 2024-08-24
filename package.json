@@ -13,7 +13,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.16.0",
-    "@spatial-id/javascript-sdk": "https://github.com/spatial-id/javascript-sdk",
+    "@spatial-id/javascript-sdk": "https://github.com/spatial-id/javascript-sdk.git",
     "@turf/turf": "^7.0.0",
     "cesium": "^1.119.0",
     "japanmesh": "^1.2.1",

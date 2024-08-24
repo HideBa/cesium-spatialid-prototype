@@ -859,9 +859,9 @@
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
   integrity sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==
 
-"@spatial-id/javascript-sdk@https://github.com/spatial-id/javascript-sdk":
+"@spatial-id/javascript-sdk@https://github.com/spatial-id/javascript-sdk.git":
   version "0.0.0"
-  resolved "git+ssh://git@github.com/spatial-id/javascript-sdk.git#144d1c6ff101bd53c36471f9e16a9304bbfc611e"
+  resolved "https://github.com/spatial-id/javascript-sdk.git#144d1c6ff101bd53c36471f9e16a9304bbfc611e"
 
 "@testing-library/jest-dom@^6.4.6":
   version "6.4.6"
